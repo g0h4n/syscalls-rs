@@ -1,6 +1,6 @@
 use ntapi::{ntldr::LDR_DATA_TABLE_ENTRY, ntpebteb::PEB, ntpsapi::PEB_LDR_DATA};
 use std::{arch::asm, collections::BTreeMap, ffi::CStr};
-use sysinfo::{ProcessExt, SystemExt};
+use sysinfo::{ProcessExt, SystemExt, PidExt};
 use windows_sys::Win32::System::{
     Diagnostics::Debug::{IMAGE_DIRECTORY_ENTRY_EXPORT, IMAGE_NT_HEADERS64},
     SystemServices::{
@@ -118,12 +118,11 @@ pub fn get_process_id_by_name(target_process: &str) -> usize {
     let mut system = sysinfo::System::new();
     system.refresh_all();
 
-    let mut process_id: usize = 0;
-
-    for process in system.process_by_name(target_process) {
-        process_id = process.pid();
+    let mut process_id = 0;
+    for process in system.processes_by_name(target_process) {
+        process_id = process.pid().as_u32();
     }
-    return process_id;
+    return process_id as usize;
 }
 
 /// Gets a pointer to IMAGE_NT_HEADERS32 x86
