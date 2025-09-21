@@ -16,7 +16,7 @@ macro_rules! syscall {
             let _ = $y;
             cnt += 1;
         )+
-        crate::syscall::do_syscall(ssn, cnt, $($y), +)
+        syscalls::syscall::do_syscall(ssn, cnt, $($y), +)
     }}
 }
 
@@ -31,7 +31,7 @@ macro_rules! syscall {
             let _ = $y;
             cnt += 1;
         )+
-        crate::syscall::do_syscall(ssn, addr, cnt, $($y), +)
+        syscalls::syscall::do_syscall(ssn, addr, cnt, $($y), +)
     }}
 }
 
